@@ -13,6 +13,8 @@ public class CubeSpawner : MonoBehaviour
     
     [SerializeField] private bool isSpawning = true;
 
+    public event Action<Cube> onCubeSpawned;
+
     private void Start()
     {
         StartCoroutine(SpawnCubes());
@@ -35,7 +37,14 @@ public class CubeSpawner : MonoBehaviour
 
         GameObject newCube = Instantiate(cubePrefab, randomSpawnPoint, Quaternion.identity);
 
+        onCubeSpawned.Invoke(newCube.GetComponent<Cube>());
+
         // Add some rotation to cube
         newCube.GetComponent<Rigidbody>().AddTorque(Vector3.one + 10f * randomSpawnPoint, ForceMode.Impulse);
+    }
+
+    private void OnCubeCollided(Collider other)
+    {
+
     }
 }
